@@ -78,6 +78,15 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="dlist.cpp" />
+    <ClCompile Include="lexer.cpp" />
+    <ClCompile Include="LongNumber.cpp" />
+    <ClCompile Include="main.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="dlist.h" />
+    <ClInclude Include="lexer.h" />
+    <ClInclude Include="LongNumber.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
