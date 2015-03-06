@@ -5,14 +5,14 @@
 class lexer;
 enum state
 {
-	A,B,C,D,E,F,G,H,I,J,K1,K2,K3,K4,K5,K6,K7,K8,K9,K10,K11,K12,K13,K14,K15,L,M, N,ERROR_STATE, LAST_STATE
+	A,B,C,D,E,F,G,H,H_LESS,H_MORE,I,J,K1,K2,K3,K4,K5,K6,K7,K8,K9,K10,K11,K12,K13,K14,K15,L,M, N,ERROR_STATE, LAST_STATE
 };
 
 enum transliterator_type
 {
-	DIGIT, LETTER, COLON, SEMICOLON, OPERATION, RELATIONSHIP, CR, ERROR_TYPE,
+	DIGIT, LETTER, COLON, SEMICOLON, OPERATION, CR, ERROR_TYPE,
 	EXIT, EQUALITY_SIGN, WHITESPACE, LESS_SIGN, MORE_SIGN, DASH, LEFT_PAR,
-	RIGHT_PAR, LAST_TRANSLITERATOR_TYPE
+	RIGHT_PAR, NOT, LAST_TRANSLITERATOR_TYPE
 };
 
 enum operation_type{ PLUS, MINUS, MULTIPLICATION, DIVISION, MOD, LAST_OPERATION_TYPE };
@@ -101,6 +101,12 @@ class lexer
 	void F1_dash(transliterator_token tkn);
 
 	void G1(transliterator_token tkn);
+
+	void H1(transliterator_token tkn);
+	void H2(transliterator_token tkn);
+	void H2a(transliterator_token tkn);
+	void H3(transliterator_token tkn);
+	void H3a(transliterator_token tkn);
 
 	void K1a(transliterator_token tkn);
 	void K1b(transliterator_token tkn);

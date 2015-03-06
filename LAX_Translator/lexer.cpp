@@ -6,19 +6,20 @@
 #include <stdlib.h> 
 #include <string>
 
-std::vector<std::string> state_arr = { "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K1", "K2", "K3", "K4", "K5", "K6", "K7", "K8", "K9", "K10", "K11", "K12", "K13", "K14", "K15", "L","M","N", "ERROR",
+std::vector<std::string> state_arr = { "A", "B", "C", "D", "E", "F", "G", "H", "H_less", "H_more", "I", "J", "K1", "K2", "K3", "K4", "K5", "K6", "K7", "K8", "K9", "K10", "K11", "K12", "K13", "K14", "K15", "L", "M", "N", "ERROR",
 "LAST_STATE" };
 std::vector<std::string> lexeme_type_arr = {
 	"ID", "CONSTANT", "EMPTY", "DIM", "AS", "FOR", "IN", "LEFT_PAR", "RIGHT_PAR",
 	"NEXT", "IF", "THEN", "ELSE", "INPUT", "PRINT", "LABEL", "GOTO", "SWITCH",
 	"CASE", "BREAK", "END", "FAIL",
-	"ERROR_LEXEME", "NONE", "EXIT_LEXEME", "ASSIGNMENT","OPERATION_LEXEME" ,"RELATIONSHIP_LEXEME", "LAST_LEXEME_TYPE"
+	"ERROR_LEXEME", "NONE", "EXIT_LEXEME", "ASSIGNMENT","OPERATION_LEXEME" ,
+	"RELATIONSHIP_LEXEME", "LAST_LEXEME_TYPE"
 };
 std::vector<std::string> transliterator_type_arr = { 
-	"DIGIT", "LETTER", "COLON", "SEMICOLON", "OPERATION", "RELATIONSHIP",
+	"DIGIT", "LETTER", "COLON", "SEMICOLON", "OPERATION", 
 	"CR", "ERROR_TYPE", "EXIT", "EQUALITY_SIGN", "WHITESPACE", "LESS_SIGN",
 	"MORE_SIGN", "MINUS_SIGN", "LEFT_PAR",
-	"RIGHT_PAR", "LAST_TRANSLITERATOR_TYPE" };
+	"RIGHT_PAR","NOT" "LAST_TRANSLITERATOR_TYPE" };
 lexer::lexer() :m_fsm_table(LAST_STATE, std::vector<lexer_method>(LAST_TRANSLITERATOR_TYPE, &lexer::Error)),
 m_class_register(NONE),
 m_current_state(state::A)
@@ -136,14 +137,30 @@ m_current_state(state::A)
 	m_fsm_table[state::G][OPERATION] = &lexer::F1a;
 	m_fsm_table[state::G][CR] = &lexer::A2;
 	m_fsm_table[state::G][ERROR_TYPE] = &lexer::Error;
-	m_fsm_table[state::G][EQUALITY_SIGN] = &lexer::G1;
-	m_fsm_table[state::G][WHITESPACE] = &lexer::A1;
-	m_fsm_table[state::G][LESS_SIGN] = &lexer::E1;
-	m_fsm_table[state::G][MORE_SIGN] = &lexer::E1;
+	m_fsm_table[state::G][EQUALITY_SIGN] = &lexer::H1;
+	m_fsm_table[state::G][WHITESPACE] = &lexer::A2;
+	m_fsm_table[state::G][LESS_SIGN] = &lexer::H2a;
+	m_fsm_table[state::G][MORE_SIGN] = &lexer::H3a;
 	m_fsm_table[state::G][DASH] = &lexer::F1_dash;
-	m_fsm_table[state::G][LEFT_PAR] = &lexer::Pl;
-	m_fsm_table[state::G][RIGHT_PAR] = &lexer::Pr;
-	m_fsm_table[state::G][EXIT] = &lexer::Exit;
+	m_fsm_table[state::G][LEFT_PAR] = &lexer::Pl1;
+	m_fsm_table[state::G][RIGHT_PAR] = &lexer::Pr1;
+	m_fsm_table[state::G][EXIT] = &lexer::Exit_add_lexeme;
+
+	m_fsm_table[state::G][DIGIT] = &lexer::B1a;
+	m_fsm_table[state::G][LETTER] = &lexer::C1b;
+	m_fsm_table[state::G][COLON] = &lexer::D1a;
+	m_fsm_table[state::G][SEMICOLON] = &lexer::E1a;
+	m_fsm_table[state::G][OPERATION] = &lexer::F1a;
+	m_fsm_table[state::G][CR] = &lexer::A2;
+	m_fsm_table[state::G][ERROR_TYPE] = &lexer::Error;
+	m_fsm_table[state::G][EQUALITY_SIGN] = &lexer::H1;
+	m_fsm_table[state::G][WHITESPACE] = &lexer::A2;
+	m_fsm_table[state::G][LESS_SIGN] = &lexer::H2a;
+	m_fsm_table[state::G][MORE_SIGN] = &lexer::H3a;
+	m_fsm_table[state::G][DASH] = &lexer::F1_dash;
+	m_fsm_table[state::G][LEFT_PAR] = &lexer::Pl1;
+	m_fsm_table[state::G][RIGHT_PAR] = &lexer::Pr1;
+	m_fsm_table[state::G][EXIT] = &lexer::Exit_add_lexeme;
 
 	//reading an id
 	m_fsm_table[state::I][DIGIT] = &lexer::I1;
@@ -433,6 +450,34 @@ void lexer::G1(transliterator_token tkn)
 {
 	m_class_register = lexeme_type::ASSIGNMENT;
 	m_current_state = G;
+}
+void lexer::H1(transliterator_token tkn)
+{
+	m_class_register = lexeme_type::RELATIONSHIP_LEXEME;
+	m_value_register = relationship_type::EQUAL;
+	m_current_state = H;
+}
+void lexer::H2(transliterator_token tkn)
+{
+	m_class_register = lexeme_type::RELATIONSHIP_LEXEME;
+	m_value_register = relationship_type::LESS;
+	m_current_state = H_LESS;
+}
+void lexer::H2a(transliterator_token tkn)
+{
+	add_lexeme_token();
+	H2(tkn);
+}
+void lexer::H3(transliterator_token tkn)
+{
+	m_class_register = lexeme_type::RELATIONSHIP_LEXEME;
+	m_value_register = relationship_type::MORE;
+	m_current_state = H_MORE;
+}
+void lexer::H3a(transliterator_token tkn)
+{
+	add_lexeme_token();
+	H3(tkn);
 }
 void lexer::I1(transliterator_token tkn)
 {
