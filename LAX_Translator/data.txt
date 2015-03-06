@@ -1,1 +1,4 @@
-1 + 2 - 1 % 2;
+input V ;
+print E ;
+:L goto L ;
+switch(E) case a
