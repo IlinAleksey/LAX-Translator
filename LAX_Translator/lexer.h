@@ -49,9 +49,11 @@ class lexer
 	void* m_pointer_register;
 	LongNumber m_constant_register;
 	relationship_type m_relation_register;
-	std::string m_variable_register;
+	std::string m_id_register;
 	int m_identification_register;
 	int m_value_register;
+	std::string m_buffer;
+	std::string::iterator m_current_position;
 
 	transliterator_token transliterator(char symbol);
 
