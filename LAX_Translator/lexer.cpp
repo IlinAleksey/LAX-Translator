@@ -7,6 +7,25 @@
 #include <string>
 #include <sstream>
 
+lexer::lexer()
+{
+
+}
+lexer::~lexer()
+{
+
+}
+void lexer::add_id()
+{
+	for (m_current_position;
+		m_current_position != m_buffer.end() && isdigit(*m_current_position) || isalpha(*m_current_position);
+		m_current_position++)
+	{
+		m_id_register += *m_current_position;
+	}
+	m_lexeme_list.push_back({ lexeme_type::ID, NULL });
+}
+
 void lexer::Tokenize(std::string filename)
 {
 	m_current_state = state::A;
@@ -19,27 +38,33 @@ void lexer::Tokenize(std::string filename)
 	buffer << t.rdbuf();
 	m_buffer = buffer.str();
 	char ch;
+
 	for (m_current_position = m_buffer.begin(); 
 		m_current_position != m_buffer.end();
-		m_current_position++)
+		)
 	{
 		switch (*m_current_position)
 		{
 		case 'h': case 'j': case 'k': case 'l': case 'm': case 'o':
 		case 'p': case 'q': case 'r': case 's': case 't': case 'u':
-		case 'v': case 'w': case 'x': case 'y': case 'z':
-			m_id_register += *m_current_position
-			for (std::string::iterator i = m_current_position;  isdigit(*i) || isalpha(*i)  ; i++)
-			{
-
-			}
+		case 'v': case 'w': case 'x': case 'y': case 'z': case '_':
+			add_id();
 			break;
+		case 'a':
+			if (std::distance(m_current_position, m_buffer.end()) >= 1 
+				&& m_current_position[1] == 's')
+			{
+				m_lexeme_list.push_back({ lexeme_type::AS, NULL });
+				m_current_position += 2;
+			}
+			else
+			{
+				add_id();
+			}
 		default:
 			break;
 		}
 	}
-	m_log_message += lexeme_type_arr[m_class_register] + " " + state_arr[m_current_state] + '\n';
-	(this->*m_fsm_table[m_current_state][EXIT])({ transliterator_type::EXIT, 0 });
 
 	myfile.close();
 }

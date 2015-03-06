@@ -20,7 +20,7 @@ enum relationship_type
 };
 enum lexeme_type
 {
-	EMPTY, DIM, AS, FOR, IN, LEFT_PAR, RIGHT_PAR, NEXT, IF, THEN, ELSE, INPUT, PRINT, LABEL, GOTO, SWITCH, CASE, BREAK, END, FAIL, ERROR_LEXEME, NONE, EXIT_LEXEME, LAST_LEXEME_TYPE
+	ID, OPERATION_LEXEME, RELATIONSHIP_LEXEME, EMPTY, DIM, AS, FOR, IN, LEFT_PAR, RIGHT_PAR, NEXT, IF, THEN, ELSE, INPUT, PRINT, LABEL, GOTO, SWITCH, CASE, BREAK, END, FAIL, ERROR_LEXEME, NONE, EXIT_LEXEME, LAST_LEXEME_TYPE
 };
 
 struct transliterator_token
@@ -76,16 +76,9 @@ class lexer
 
 	void write_log_file();
 
-	void A1(transliterator_token tkn);
-	void C1(transliterator_token tkn);
-	void C1a(transliterator_token tkn);
-	void K1a(transliterator_token tkn);
-	void K2a(transliterator_token tkn);
-	void K3a(transliterator_token tkn);
-	void L1(transliterator_token tkn);
-	void M1(transliterator_token tkn);
-	void Error(transliterator_token tkn);
-	void Exit_add_lexeme(transliterator_token tkn);
+	void add_id();
+
+	
 public:
 	void Tokenize(std::string filename);
 	lexer();

@@ -3,6 +3,6 @@
 int main()
 {
 	lexer lxr;
-	lxr.Tokenize("data.txt");
+	lxr.Tokenize("prog.txt");
 	return 0;
 }
