@@ -1,4 +1,4 @@
 input V ;
 print E ;
 :L goto L ;
-switch(E) case a
+a as int ;

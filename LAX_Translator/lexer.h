@@ -5,7 +5,7 @@
 class lexer;
 enum state
 {
-	A1,A2,B1,C1,D1,E1,F1,G1,H1,K1,I1,J1,ERROR_STATE, LAST_STATE
+	A1,A2,A3,B1,C1,D1,E1,F1,G1,H1,K1,I1,J1,T1,ERROR_STATE, LAST_STATE
 };
 enum transliterator_type
 {
@@ -18,17 +18,22 @@ enum operation_type
 };
 enum relationship_type
 {
-	MORE, LESS, EQUAL, NOT, GREATER_OR_EQUAL, LESS_OR_EQUAL, NOT_EQUAL, EQUAL_EQUAL, LAST_RELATIONSHIP_TYPE
+	MORE, LESS, EQUAL, NOT, GREATER_OR_EQUAL, LESS_OR_EQUAL,
+	NOT_EQUAL, EQUAL_EQUAL, LAST_RELATIONSHIP_TYPE
 };
 enum punctuator_type
 {
 	SEMICOLON,LEFT_BRACKET,RIGHT_BRACKET
 };
+enum type_type
+{
+	INT, LONG
+};
 enum lexeme_type
 {
-	ID, CONSTANT, PUNCTUATOR_LEXEME, ASSIGNMENT, OPERATION_LEXEME, COLON_LEXEME,
-	RELATIONSHIP_LEXEME, EMPTY, DIM, AS, FOR, IN, NEXT, IF, THEN, ELSE, INPUT,
-	PRINT, LABEL, GOTO, SWITCH, CASE,
+	ID, CONSTANT, PUNCTUATOR_LEXEME, ASSIGNMENT, OPERATION_LEXEME, TYPE, COLON_LEXEME,
+	LABEL, RELATIONSHIP_LEXEME, EMPTY, DIM, AS, FOR, IN, NEXT, IF, THEN, ELSE, INPUT,
+	PRINT, GOTO, SWITCH, CASE,
 	BREAK, END, FAIL, ERROR_LEXEME, NONE, EXIT_LEXEME,
 	LAST_LEXEME_TYPE
 };
@@ -64,6 +69,8 @@ class lexer
 	int m_identification_register;
 	int m_value_register;
 	int m_right_comment_register;
+	bool m_label_register;
+
 
 	transliterator_token transliterator(char symbol);
 
@@ -90,10 +97,13 @@ class lexer
 	void A1a(transliterator_token tkn);
 	void A1K1(transliterator_token tkn);
 	void A1b(transliterator_token tkn);
+	void A1c(transliterator_token tkn);
 	void A1d(transliterator_token tkn);
 
 	void A2a(transliterator_token tkn);
 	void A2b(transliterator_token tkn);
+
+	void A3a(transliterator_token tkn);
 
 	void B1a(transliterator_token tkn);
 	void B1b(transliterator_token tkn);
@@ -139,11 +149,16 @@ class lexer
 
 	void N1(transliterator_token tkn);
 
+	void T1a(transliterator_token tkn);
+	void T1b(transliterator_token tkn);
+
 	void Error(transliterator_token tkn);
 
 	void EXIT1(transliterator_token tkn);
 	void EXIT1a(transliterator_token tkn);
 	void EXIT1b(transliterator_token tkn);
+	void EXIT1c(transliterator_token tkn);
+	void EXIT1d(transliterator_token tkn);
 	void EXIT1n(transliterator_token tkn);
 
 public:
