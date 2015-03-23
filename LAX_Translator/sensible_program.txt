@@ -1,0 +1,9 @@
+dim A as int
+input A ;
+dim res as int
+dim i as int
+i = 1
+L1 for i in ( i < A )
+res = res * i
+next L1
+print res

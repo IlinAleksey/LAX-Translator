@@ -1,4 +1,2 @@
-input V ;
-print E ;
-:L goto L ;
-a as int ;
+; dim dimension as id int integer long = 1 + - * / % < > <= >= == != for in ( ) next if
+then else input print :label goto <-- comment --> A2 2A &

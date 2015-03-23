@@ -29,6 +29,10 @@ enum type_type
 {
 	INT, LONG
 };
+enum cr_type
+{
+	WHITESPACE, NEWLINE, LAST_CR_TYPE
+};
 enum lexeme_type
 {
 	ID, CONSTANT, PUNCTUATOR_LEXEME, ASSIGNMENT, OPERATION_LEXEME, TYPE, COLON_LEXEME,
@@ -78,6 +82,7 @@ class lexer
 	void add_lexeme_token();
 
 	std::unordered_map<std::string, LongNumber>m_id_table;
+
 	std::unordered_map<std::string, LongNumber>m_constant_table;
 
 	void add_constant();
@@ -159,6 +164,7 @@ class lexer
 	void EXIT1b(transliterator_token tkn);
 	void EXIT1c(transliterator_token tkn);
 	void EXIT1d(transliterator_token tkn);
+	void EXIT1h(transliterator_token tkn);
 	void EXIT1n(transliterator_token tkn);
 
 public:

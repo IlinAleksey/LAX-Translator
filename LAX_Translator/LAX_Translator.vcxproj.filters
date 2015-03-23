@@ -42,5 +42,6 @@
   <ItemGroup>
     <Text Include="data.txt" />
     <Text Include="log.txt" />
+    <Text Include="sensible_program.txt" />
   </ItemGroup>
 </Project>
