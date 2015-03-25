@@ -110,7 +110,8 @@ LongNumber& LongNumber::decr()
 	}
 	if (tosubtract>0)
 	{
-		return LongNumber(0);
+		*this = LongNumber(0);
+		return *this;
 	}
 	else
 	{
@@ -319,7 +320,7 @@ LongNumber& LongNumber::subtractFrom(LongNumber& _number, lnum_it position)
 
 	if (tosubtract>0)
 	{
-		return LongNumber(0);
+		return *this = LongNumber(0);
 	}
 	else
 	{
@@ -328,80 +329,6 @@ LongNumber& LongNumber::subtractFrom(LongNumber& _number, lnum_it position)
 	}
 }
 
-LongNumber LongNumber::subtract_natural(const LongNumber& _number) const
-{
-	if (_number.size()>size())
-	{
-		return LongNumber(0);
-	}
-	LongNumber res;
-
-	lnum_it it1 = rbegin();
-	lnum_it it2 = _number.rbegin();
-
-	byte tosubtract = 0;
-	for (; it1 != rend() && it2 != _number.rend(); it1--, it2--)
-	{
-		byte temp = *it1 - *it2 - tosubtract;
-
-		if (temp >= 0)
-		{
-			res.m_number.push_front(temp);
-			tosubtract = 0;
-		}
-		else
-		{
-			res.m_number.push_front((10 + temp) % 10);
-			tosubtract = 1;
-		}
-	}
-	if (tosubtract>0)
-	{
-		return LongNumber(0);
-	}
-	else
-	{
-		return res;
-	}
-}
-
-LongNumber& LongNumber::subtract_natural(LongNumber& _number)
-{
-	
-	if (_number.size()>size())
-	{
-		return *this = LongNumber(0);
-	}
-	LongNumber res;
-
-	lnum_it it1 = rbegin();
-	lnum_it it2 = _number.rbegin();
-
-	byte tosubtract = 0;
-	for (; it1 != rend() && it2 != _number.rend(); it1--, it2--)
-	{
-		byte temp = *it1 - *it2 - tosubtract;
-
-		if (temp >= 0)
-		{
-			*it1=temp;
-			tosubtract = 0;
-		}
-		else
-		{
-			*it1=(10 + temp) % 10;
-			tosubtract = 1;
-		}
-	}
-	if (tosubtract>0)
-	{
-		return *this = LongNumber(0);
-	}
-	else
-	{
-		return res;
-	}
-}
 
 LongNumber LongNumber::multByDigit(const byte digit) const
 {

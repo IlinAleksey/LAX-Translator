@@ -8,7 +8,7 @@
 
 std::vector<std::string> state_arr = { 
 	"A1", "A2","A3", "B1", "C1", "D1", "E1", "F1", "G1", 
-	"H1", "K1", "I1", "J1","T1" "ERROR_STATE", "LAST_STATE" };
+	"H1", "K1","K2", "I1", "J1","T1" "ERROR_STATE", "LAST_STATE" };
 std::vector<std::string> lexeme_type_arr = {
 	"ID", "CONSTANT", "PUNCTUATOR_LEXEME", "ASSIGNMENT", "OPERATION_LEXEME","TYPE", "COLON_LEXEME",
 	"LABEL", 
@@ -166,6 +166,16 @@ m_label_register(false)
 	m_fsm_table[state::K1][transliterator_type::CR] = &lexer::A1c;
 	m_fsm_table[state::K1][transliterator_type::EXIT] = &lexer::EXIT1c;
 
+	m_fsm_table[state::K2][transliterator_type::LETTER] = &lexer::I1a;
+	m_fsm_table[state::K2][transliterator_type::DIGIT] = &lexer::I1a;
+	m_fsm_table[state::K2][transliterator_type::CR] = &lexer::A1e;
+	m_fsm_table[state::K2][transliterator_type::EXIT] = &lexer::EXIT1c;
+
+	m_fsm_table[state::K3][transliterator_type::LETTER] = &lexer::I1c;
+	m_fsm_table[state::K3][transliterator_type::DIGIT] = &lexer::I1c;
+	m_fsm_table[state::K3][transliterator_type::CR] = &lexer::A1f;
+	m_fsm_table[state::K3][transliterator_type::EXIT] = &lexer::EXIT1c;
+
 	m_fsm_table[state::ERROR_STATE][transliterator_type::CR] = &lexer::A1a;
 	m_fsm_table[state::ERROR_STATE][transliterator_type::EXIT] = &lexer::EXIT1a;
 }
@@ -179,8 +189,20 @@ void lexer::add_lexeme_token()
 	switch (m_lexeme_type_register)
 	{
 	case ID:
-		m_pointer_register = &m_id_table[m_variable_register];
-		m_lexeme_list.push_back({ m_lexeme_type_register, (int) m_pointer_register, m_variable_register });
+		if (m_label_register)
+		{
+			m_pointer_register = &m_label_table[m_variable_register];
+			m_lexeme_list.push_back({ m_lexeme_type_register, (int) m_pointer_register, m_variable_register });
+		}
+		else if (m_id_register)
+		{
+			m_pointer_register = &m_id_table[m_variable_register];
+			m_lexeme_list.push_back({ m_lexeme_type_register, (int) m_pointer_register, m_variable_register });
+		}
+		else
+		{
+			m_expected_id = m_variable_register;
+		}
 		break;
 	case CONSTANT:
 		m_pointer_register = &m_id_table[m_variable_register];
@@ -206,7 +228,7 @@ void lexer::add_lexeme_token()
 		m_lexeme_list.push_back({ m_lexeme_type_register, m_value_register, "" });
 		break;
 	case LABEL:
-		m_pointer_register = &m_id_table[m_variable_register];
+		m_pointer_register = &m_label_table[m_variable_register];
 		m_lexeme_list.push_back({ 
 			m_lexeme_type_register, 
 			(int) m_pointer_register, 
@@ -284,6 +306,7 @@ void lexer::add_lexeme_token()
 	m_lexeme_type_register = NONE;
 	m_variable_register = "";
 	m_value_register = 0;
+	m_label_register = false;
 }
 
 void lexer::A1(transliterator_token tkn)
@@ -332,7 +355,22 @@ void lexer::A1d(transliterator_token tkn)
 	{
 		m_lexeme_type_register = LABEL;
 	}
+	else
+	{
+		m_id_register = false;
+	}
 	add_lexeme_token();
+	m_current_state = state::A1;
+	return;
+}
+void lexer::A1e(transliterator_token tkn)
+{
+	if (m_label_register)
+	{
+		m_lexeme_type_register = ERROR_LEXEME;
+	}
+	add_lexeme_token();
+	m_label_register = true;
 	m_current_state = state::A1;
 	return;
 }
@@ -554,14 +592,14 @@ void lexer::K1c(transliterator_token tkn)
 {
 	m_lexeme_type_register = lexeme_type::FOR;
 	m_variable_register += tkn.value;
-	m_current_state = state::K1;
+	m_current_state = state::K3;
 	return;
 }
 void lexer::K1d(transliterator_token tkn)
 {
 	m_lexeme_type_register = lexeme_type::NEXT;
 	m_variable_register += tkn.value;
-	m_current_state = state::K1;
+	m_current_state = state::K2;
 	return;
 }
 void lexer::K1e(transliterator_token tkn)
@@ -575,14 +613,14 @@ void lexer::K1f(transliterator_token tkn)
 {
 	m_lexeme_type_register = lexeme_type::THEN;
 	m_variable_register += tkn.value;
-	m_current_state = state::K1;
+	m_current_state = state::K2;
 	return;
 }
 void lexer::K1g(transliterator_token tkn)
 {
 	m_lexeme_type_register = lexeme_type::ELSE;
 	m_variable_register += tkn.value;
-	m_current_state = state::K1;
+	m_current_state = state::K2;
 	return;
 }
 void lexer::K1h(transliterator_token tkn)
@@ -596,7 +634,7 @@ void lexer::K1i(transliterator_token tkn)
 {
 	m_lexeme_type_register = lexeme_type::GOTO;
 	m_variable_register += tkn.value;
-	m_current_state = state::K1;
+	m_current_state = state::K2;
 	return;
 }
 void lexer::K1j(transliterator_token tkn)

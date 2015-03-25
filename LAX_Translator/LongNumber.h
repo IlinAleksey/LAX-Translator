@@ -53,8 +53,8 @@ public:
 
 	int size()const { return m_number.size(); }
 
-	byte& operator[](int index){ return *(m_number[index]); }
-	const byte& operator[](int index) const{ return *(m_number[index]); }
+	byte& operator[](int index){ return m_number[index]; }
+	const byte& operator[](int index) const{ return m_number[index]; }
 
 	bool IsZero()const { return !*begin(); }
 

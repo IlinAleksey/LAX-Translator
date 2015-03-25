@@ -5,7 +5,7 @@
 class lexer;
 enum state
 {
-	A1,A2,A3,B1,C1,D1,E1,F1,G1,H1,K1,I1,J1,T1,ERROR_STATE, LAST_STATE
+	A1,A2,A3,B1,C1,D1,E1,F1,G1,H1,K1,K2,I1,J1,T1,ERROR_STATE, LAST_STATE
 };
 enum transliterator_type
 {
@@ -70,10 +70,12 @@ class lexer
 	LongNumber m_constant_register;
 	relationship_type m_relationship_register;
 	std::string m_variable_register;
+	std::string m_expected_id;
 	int m_identification_register;
 	int m_value_register;
 	int m_right_comment_register;
 	bool m_label_register;
+	bool m_id_register;
 
 
 	transliterator_token transliterator(char symbol);
@@ -84,6 +86,8 @@ class lexer
 	std::unordered_map<std::string, LongNumber>m_id_table;
 
 	std::unordered_map<std::string, LongNumber>m_constant_table;
+
+	std::unordered_map<std::string, LongNumber>m_label_table;
 
 	void add_constant();
 	void add_variable();
@@ -104,6 +108,7 @@ class lexer
 	void A1b(transliterator_token tkn);
 	void A1c(transliterator_token tkn);
 	void A1d(transliterator_token tkn);
+	void A1e(transliterator_token tkn);
 
 	void A2a(transliterator_token tkn);
 	void A2b(transliterator_token tkn);

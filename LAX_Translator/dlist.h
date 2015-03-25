@@ -73,7 +73,7 @@ namespace dlst
 		dlist& clear();
 
 		dlist operator=(const dlist& _dlist);
-		iterator<T>& operator[](int index)const{ return begin() + index; }
+		T& operator[](int index)const{ return *(begin() + index); }
 		friend std::ostream& operator<<(std::ostream& out, const dlist& _dlist)
 		{
 			for (iterator<T> it = _dlist.begin(); it != _dlist.end(); it++)
