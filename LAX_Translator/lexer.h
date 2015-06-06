@@ -38,7 +38,7 @@ enum lexeme_type
 	ID, CONSTANT, PUNCTUATOR_LEXEME, ASSIGNMENT, OPERATION_LEXEME, TYPE, COLON_LEXEME,
 	LABEL, RELATIONSHIP_LEXEME, EMPTY, DIM, AS, FOR, IN, NEXT, IF, THEN, ELSE, INPUT,
 	PRINT, GOTO, SWITCH, CASE,
-	BREAK, END, FAIL, ERROR_LEXEME, NONE, EXIT_LEXEME,
+	BREAK,DEFAULT, END, FAIL, ERROR_LEXEME, NONE, EXIT_LEXEME,
 	LAST_LEXEME_TYPE
 };
 
@@ -149,6 +149,7 @@ class lexer
 	void K1m(transliterator_token tkn);
 	void K1n(transliterator_token tkn);
 	void K1o(transliterator_token tkn);
+	void K1p(transliterator_token tkn);
 
 	void M1(transliterator_token tkn);
 
@@ -169,6 +170,7 @@ class lexer
 
 public:
 	void Tokenize(std::string filename);
+	std::vector<lexeme_token>& get_lexeme_list() { return m_lexeme_list; }
 	lexer();
 	~lexer();
 };

@@ -79,17 +79,46 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="dlist.cpp" />
+    <ClCompile Include="Grammar.cpp" />
+    <ClCompile Include="Hashtable.cpp" />
+    <ClCompile Include="HtmlLogger.cpp" />
     <ClCompile Include="lexer.cpp" />
+    <ClCompile Include="LexerStack.cpp" />
+    <ClCompile Include="LLkTable.cpp" />
+    <ClCompile Include="LLkTableBuilder.cpp" />
     <ClCompile Include="LongNumber.cpp" />
+    <ClCompile Include="LrItem.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="Production.cpp" />
+    <ClCompile Include="ProductionLexer.cpp" />
+    <ClCompile Include="Sequence.cpp" />
+    <ClCompile Include="SequenceSet.cpp" />
+    <ClCompile Include="Symbol.cpp" />
+    <ClCompile Include="tinyxml2.cpp" />
+    <ClCompile Include="Translator.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="dlist.h" />
+    <ClInclude Include="Grammar.h" />
+    <ClInclude Include="Hashtable.h" />
+    <ClInclude Include="HtmlLogger.h" />
     <ClInclude Include="lexer.h" />
+    <ClInclude Include="LexerStack.h" />
+    <ClInclude Include="LLkTable.h" />
+    <ClInclude Include="LLkTableBuilder.h" />
     <ClInclude Include="LongNumber.h" />
+    <ClInclude Include="LrItem.h" />
+    <ClInclude Include="Production.h" />
+    <ClInclude Include="ProductionLexer.h" />
+    <ClInclude Include="Sequence.h" />
+    <ClInclude Include="SequenceSet.h" />
+    <ClInclude Include="Symbol.h" />
+    <ClInclude Include="tinyxml2.h" />
+    <ClInclude Include="Translator.h" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="data.txt" />
+    <Text Include="data_lex.txt" />
     <Text Include="log.txt" />
     <Text Include="sensible_program.txt" />
   </ItemGroup>

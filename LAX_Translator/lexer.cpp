@@ -44,12 +44,12 @@ m_label_register(false)
 		-1,
 		16, //p
 		-1, -1,
-		24, //s
+		23, //s
 		10, //t
 		-1, -1, -1, -1, -1, -1
 	};
 	m_transition_table = {
-		{ 'i', -1, &lexer::B1b },
+		{ 'i', 43, &lexer::B1b },
 		{ 'm', -1, &lexer::K1a },
 		{ 's', -1, &lexer::K1b },
 		{ 'o', 35, &lexer::B1b },
@@ -91,7 +91,13 @@ m_label_register(false)
 		{ 'd', -1, &lexer::K1n },
 		{ 'o', -1, &lexer::B1b },
 		{ 'n', -1, &lexer::B1b },
-		{ 'g', -1, &lexer::T1a }
+		{ 'g', -1, &lexer::T1a },
+		{ 'e', -1, &lexer::B1b },
+		{ 'f', -1, &lexer::B1b },
+		{ 'a', -1, &lexer::B1b },
+		{ 'u', -1, &lexer::B1b },
+		{ 'l', -1, &lexer::B1b },
+		{ 't', -1, &lexer::K1p }
 
 	};
 	m_in_input_table = {
@@ -106,7 +112,7 @@ m_label_register(false)
 	m_fsm_table[state::A1][transliterator_type::PUNCTUATOR] = &lexer::A2a;
 	m_fsm_table[state::A1][transliterator_type::OPERATION] = &lexer::A2b;
 	m_fsm_table[state::A1][transliterator_type::RELATIONSHIP] = &lexer::F1a;
-	m_fsm_table[state::A1][transliterator_type::COLON] = &lexer::A3a;
+	m_fsm_table[state::A1][transliterator_type::COLON] = &lexer::A1d;
 	m_fsm_table[state::A1][transliterator_type::CR] = &lexer::A1;
 	m_fsm_table[state::A1][transliterator_type::EXIT] = &lexer::EXIT1;
 
@@ -119,13 +125,13 @@ m_label_register(false)
 
 	m_fsm_table[state::B1][transliterator_type::LETTER] = &lexer::M1;
 	m_fsm_table[state::B1][transliterator_type::DIGIT] = &lexer::I1a;
-	m_fsm_table[state::B1][transliterator_type::CR] = &lexer::A1d;
-	m_fsm_table[state::B1][transliterator_type::EXIT] = &lexer::EXIT1d;
+	m_fsm_table[state::B1][transliterator_type::CR] = &lexer::A1a;
+	m_fsm_table[state::B1][transliterator_type::EXIT] = &lexer::EXIT1a;
 
 	m_fsm_table[state::C1][transliterator_type::LETTER] = &lexer::D1a;
 	m_fsm_table[state::C1][transliterator_type::DIGIT] = &lexer::I1a;
-	m_fsm_table[state::C1][transliterator_type::CR] = &lexer::A1d;
-	m_fsm_table[state::C1][transliterator_type::EXIT] = &lexer::EXIT1d;
+	m_fsm_table[state::C1][transliterator_type::CR] = &lexer::A1a;
+	m_fsm_table[state::C1][transliterator_type::EXIT] = &lexer::EXIT1a;
 
 	m_fsm_table[state::D1][transliterator_type::LETTER] = &lexer::N1;
 	m_fsm_table[state::D1][transliterator_type::DIGIT] = &lexer::I1a;
@@ -158,7 +164,7 @@ m_label_register(false)
 
 	m_fsm_table[state::I1][transliterator_type::LETTER] = &lexer::I1b;
 	m_fsm_table[state::I1][transliterator_type::DIGIT] = &lexer::I1b;
-	m_fsm_table[state::I1][transliterator_type::CR] = &lexer::A1d;
+	m_fsm_table[state::I1][transliterator_type::CR] = &lexer::A1a;
 	m_fsm_table[state::I1][transliterator_type::EXIT] = &lexer::EXIT1d;
 
 	m_fsm_table[state::K1][transliterator_type::LETTER] = &lexer::I1a;
@@ -259,6 +265,9 @@ void lexer::add_lexeme_token()
 	case BREAK:
 		m_lexeme_list.push_back({ m_lexeme_type_register, NULL, "" });
 		break;
+	case DEFAULT:
+		m_lexeme_list.push_back({ m_lexeme_type_register, NULL, "" });
+		break;
 	case END:
 		m_lexeme_list.push_back({ m_lexeme_type_register, NULL, "" });
 		break;
@@ -285,6 +294,8 @@ void lexer::add_lexeme_token()
 	m_variable_register = "";
 	m_value_register = 0;
 }
+
+
 
 void lexer::A1(transliterator_token tkn)
 {
@@ -318,28 +329,31 @@ void lexer::A1b(transliterator_token tkn)
 }
 void lexer::A1c(transliterator_token tkn)
 {
-	if (m_label_register)
-	{
-		m_lexeme_type_register = ERROR_LEXEME;
-	}
+	
 	add_lexeme_token();
 	m_current_state = state::A1;
 	return;
 }
 void lexer::A1d(transliterator_token tkn)
 {
-	if (m_label_register)
+	/*if (m_label_register)
 	{
 		m_lexeme_type_register = LABEL;
 	}
 	add_lexeme_token();
+	m_current_state = state::A1;*/
+	m_lexeme_type_register = COLON_LEXEME;
+	add_lexeme_token();
 	m_current_state = state::A1;
+	m_label_register = true;
 	return;
 }
 void lexer::A3a(transliterator_token tkn)
 {
-	m_label_register = true;
-	m_current_state = state::A3;
+	m_lexeme_type_register = COLON_LEXEME;
+	//m_label_register = true;
+	add_lexeme_token();
+	m_current_state = state::A1;
 	return;
 }
 void lexer::A2a(transliterator_token tkn)
@@ -641,6 +655,13 @@ void lexer::K1o(transliterator_token tkn)
 	m_current_state = state::K1;
 	return;
 }
+void lexer::K1p(transliterator_token tkn)
+{
+	m_lexeme_type_register = lexeme_type::DEFAULT;
+	m_variable_register += tkn.value;
+	m_current_state = state::K1;
+	return;
+}
 void lexer::M1(transliterator_token tkn)
 {
 	while (m_identification_register != -1)
@@ -724,28 +745,18 @@ void lexer::EXIT1b(transliterator_token tkn)
 }
 void lexer::EXIT1c(transliterator_token tkn)
 {
-	if (m_label_register)
-	{
-		m_lexeme_type_register = ERROR_LEXEME;
-	}
 	add_lexeme_token();
 	return;
 }
 void lexer::EXIT1d(transliterator_token tkn)
 {
-	if (m_label_register)
-	{
-		m_lexeme_type_register = LABEL;
-	}
+	
 	add_lexeme_token();
 	return;
 }
 void lexer::EXIT1h(transliterator_token tkn)
 {
-	if (m_label_register)
-	{
-		m_lexeme_type_register = LABEL;
-	}
+	
 	add_lexeme_token();
 	return;
 }
@@ -801,6 +812,9 @@ transliterator_token lexer::transliterator(char symbol)
 	case ' ':
 		return{ transliterator_type::CR, cr_type::WHITESPACE };
 		break;
+	case 9:
+		return{ transliterator_type::CR, cr_type::WHITESPACE };
+		break;
 	case ';':
 		return{ transliterator_type::PUNCTUATOR, SEMICOLON };
 		break;
@@ -840,6 +854,8 @@ void lexer::Tokenize(std::string filename)
 	}
 	m_log_message += lexeme_type_arr[m_lexeme_type_register] + " " + state_arr[m_current_state] + '\n';
 	(this->*m_fsm_table[m_current_state][EXIT])({ transliterator_type::EXIT, 0 });
+	m_lexeme_type_register = lexeme_type::EXIT_LEXEME;
+	add_lexeme_token();
 	write_log_file();
 	myfile.close();
 }

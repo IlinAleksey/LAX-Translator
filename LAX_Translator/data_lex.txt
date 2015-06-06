@@ -1,0 +1,16 @@
+dim a as int ;
+dim n as int ;
+dim i as int ;
+dim j as int ;
+dim rest as int ;
+i = 2 ;
+n = 100 ;
+L for i in ( i < n + 1 )
+	j = 2 ;
+	M for j in ( j < i )
+		rest = i % j ;
+		if rest == 0 then NOTPRIME ;
+	next M ;
+	print i ;
+	:NOTPRIME ;
+next L ;
